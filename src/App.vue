@@ -1,32 +1,45 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+    <header class="header__container">
+      <router-link to="/">
+        <span>Omnichat<span class="header__text">Movie</span></span>
+      </router-link>
+    </header>
+    <main>
+      <router-view />
+    </main>
   </div>
 </template>
 
 <style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+@import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
+* {
+  box-sizing: border-box;
 }
 
-#nav {
-  padding: 30px;
+a {
+  text-decoration: none;
+  color: #000;
+}
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
+.header__container {
+  display: flex;
+  padding: 15px;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  background-color: #71aaff95;
+  box-shadow: 6px 6px 6px rgba(0, 0, 0, 0.1);
+  font-family: 'Lobster', cursive;
+  span {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #118eee;
+  }
+  .header__text {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #53f2b7;
   }
 }
 </style>

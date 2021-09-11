@@ -19,27 +19,44 @@
         </button>
       </form>
     </div>
-    <Table />
+    <Table
+      :searching-movies="movies"
+    />
+    <Pagination
+      @current-page-movies="getCurrentMovies"
+    />
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
 import Table from '@/components/Table.vue'
+import Pagination from '@/components/Pagination.vue'
+import { apiHelper } from '../utils/helper'
 
 export default {
   name: 'Home',
   components: {
-    Table
+    Table,
+    Pagination
   },
   data () {
     return {
-      inputText: ''
+      inputText: '',
+      page: '',
+      movies: []
     }
   },
   methods: {
-    searching () {
+    async searching () {
+      const { data } = await apiHelper.get(`${this.inputText}`)
+      this.movies = data.Search
+      this.$store.commit('searchingResults', Number(data.totalResults))
+      this.$store.commit('getInput', this.inputText)
       this.inputText = ''
+    },
+    getCurrentMovies (movies) {
+      this.movies = movies
     }
   }
 }
@@ -68,7 +85,6 @@ export default {
       letter-spacing: 0.5px;
       &:focus {
         border: 1px solid #118eee;
-        // transition: ease-in-out 0.5s;
       }
     }
     &__button {

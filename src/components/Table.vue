@@ -15,32 +15,20 @@
           內容
         </div>
       </div>
-      <div class="table__content">
+      <div
+        v-for="movie in searchingMovies"
+        :key="movie.imdbID"
+        class="table__content"
+      >
         <div class="table__row">
           <div class="table__data">
-            七龍珠
+            {{ movie.Title }}
           </div>
           <div class="table__data">
-            動漫
+            {{ movie.Type }}
           </div>
           <div class="table__data">
-            2001
-          </div>
-          <div class="table__data">
-            <button class="table__data__button">
-              詳細資料
-            </button>
-          </div>
-        </div>
-        <div class="table__row">
-          <div class="table__data">
-            超人
-          </div>
-          <div class="table__data">
-            電影
-          </div>
-          <div class="table__data">
-            2009
+            {{ movie.Year }}
           </div>
           <div class="table__data">
             <button class="table__data__button">
@@ -53,6 +41,23 @@
   </div>
 </template>
 
+<script>
+export default {
+  components: {
+  },
+  props: {
+    searchingMovies: {
+      type: Array
+    }
+  },
+  data () {
+    return {
+      movies: this.searchingMovies
+    }
+  }
+}
+</script>
+
 <style lang="scss" scoped>
   .table {
     width: 100%;
@@ -62,6 +67,7 @@
       display: flex;
       justify-content: center;
       text-align: center;
+      flex-direction: column;
       width: 90%;
       max-width: 800px;
       margin: 0 auto;
@@ -93,6 +99,7 @@
       background-color: rgba(64,143,255,.5);
       padding: 0.5rem;
       border-radius: 5px;
+      font-size: 1rem;
       &:hover {
         background-color: rgba(64,143,255,.7);
       }

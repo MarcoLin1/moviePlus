@@ -1,5 +1,6 @@
 <template>
   <div class="home__container">
+    <Detail />
     <div class="home__input__wrapper">
       <form
         action=""
@@ -22,6 +23,7 @@
     <Table
       :searching-movies="movies"
     />
+
     <Pagination
       @current-page-movies="getCurrentMovies"
     />
@@ -32,13 +34,15 @@
 // @ is an alias to /src
 import Table from '@/components/Table.vue'
 import Pagination from '@/components/Pagination.vue'
+import Detail from '@/components/Detail.vue'
 import { apiHelper } from '../utils/helper'
 
 export default {
   name: 'Home',
   components: {
     Table,
-    Pagination
+    Pagination,
+    Detail
   },
   data () {
     return {
@@ -63,6 +67,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap');
   .home {
     &__input__wrapper {
       margin: 2rem 0;
@@ -76,22 +81,25 @@ export default {
     }
     &__input {
       width: 100%;
-      border: none;
-      box-shadow: inset 6px 6px 6px #cbced1, inset -6px -6px 6px rgb(255, 255, 255);
+      box-shadow: 6px 6px 5px 2px #00000038;
       padding-left: 10px;
-      height: 2rem;
-      border-radius: 10px;
-      border: 1px solid transparent;
+      height: 40px;
+      border-radius: 5px;
+      border: 1px solid #eeeeee;
       letter-spacing: 0.5px;
+      font-family: 'Chakra Petch', sans-serif;
       &:focus {
-        border: 1px solid #118eee;
+        border: 1px solid #aecfff;
+        box-shadow: none;
       }
     }
     &__button {
       color: #118eee;
       border: 1px solid #aecfff;
       border-radius: 5px;
-      margin-left: 10px;
+      margin-left: 15px;
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 1.1rem;
       &:hover {
         background-color: #118eee;
         color: #fff;

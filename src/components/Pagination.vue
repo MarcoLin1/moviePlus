@@ -102,13 +102,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap');
   .pagination {
     &__container {
       width: 90%;
       max-width: 800px;
       text-align: center;
       margin: 40px auto;
-      border: 1px solid #eeeeee;
       border-radius: 10px;
     }
     &__wrapper {
@@ -116,12 +116,15 @@ export default {
       justify-content: space-between;
       height: 50px;
       border-radius: 10px;
+      font-family: 'Chakra Petch', sans-serif;
     }
     &__pre, &__next {
       display: block;
       line-height: 50px;
       padding: 0 10px;
       width: 10%;
+      height: 52px;
+      box-shadow: 6px 6px 6px #0000002b;
       & a {
         font-size: 1.5rem;
         font-weight: bold;
@@ -129,25 +132,28 @@ export default {
       }
       &:hover {
         background-color: rgb(94, 233, 182);
+        border: none;
+        box-shadow: none;
       }
       &:hover a {
         color: #fff;
       }
     }
     &__pre {
-      border-right: 1px solid #eeeeee;
       border-top-left-radius: 10px;
       border-bottom-left-radius: 10px;
+      margin-right: 5px;
     }
     &__next {
-      border-left: 1px solid #eeeeee;
       border-top-right-radius: 10px;
       border-bottom-right-radius: 10px;
+      margin-left: 5px;
     }
     &__numbers {
       width: 100%;
-      display: flex;
-      justify-content: space-around;
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      grid-gap: 5px;
       line-height: 50px;
       a {
         width: 100%;
@@ -157,9 +163,37 @@ export default {
         }
       }
     }
+    &__number {
+      box-shadow: 6px 6px 6px #0000002b;
+      &:hover {
+        box-shadow: none;
+        margin: 0 5px;
+      }
+    }
   }
   .active {
     background-color: rgb(94, 233, 182);
     color: #fff;
+    box-shadow: none;
+    margin: 0 5px;
+  }
+  @media screen and (max-width: 550px) {
+    .pagination {
+      &__wrapper {
+        display: block;
+        min-width: 270px;
+      }
+      &__pre {
+        min-width: 50px;
+        margin-bottom: 10px;
+      }
+      &__next {
+        min-width: 50px;
+        margin: 10px 0 0 auto;
+      }
+      &__numbers {
+        grid-template-columns: repeat(5, 1fr);
+      }
+    }
   }
 </style>

@@ -3,16 +3,16 @@
     <div class="table">
       <div class="table__header">
         <div class="table__header__item">
-          名稱
+          Name
         </div>
         <div class="table__header__item">
-          類型
+          Type
         </div>
         <div class="table__header__item">
-          年份
+          Year
         </div>
         <div class="table__header__item">
-          內容
+          Content
         </div>
       </div>
       <div
@@ -31,8 +31,12 @@
             {{ movie.Year }}
           </div>
           <div class="table__data">
-            <button class="table__data__button">
-              詳細資料
+            <button
+              :id="movie.imdbID"
+              class="table__data__button"
+              @click.stop.prevent="showDetail(movie.imdbID)"
+            >
+              Detail
             </button>
           </div>
         </div>
@@ -42,6 +46,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   components: {
   },
@@ -54,15 +59,26 @@ export default {
     return {
       movies: this.searchingMovies
     }
+  },
+  methods: {
+    showDetail (id) {
+      axios.get(`http://www.omdbapi.com/?apikey=752b08a&i=${id}&plot=full`)
+        .then(response => {
+          const { data } = response
+          this.$store.commit('getMovieDetailed', data)
+          this.$store.commit('openModal')
+        })
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap');
   .table {
     width: 100%;
-    border: 1px solid #eeeeee;
     border-radius: 5px;
+    box-shadow: 6px 6px 6px #0000002b;
     &__container {
       display: flex;
       justify-content: center;
@@ -76,18 +92,29 @@ export default {
       display: flex;
       width: 100%;
       padding: 1rem 0;
-      background-color: rgba(64,143,255,.5);
+      background-color: rgba(64, 144, 255, 0.783);
+      font-family: 'Chakra Petch', sans-serif;
+      font-weight: 700;
+      font-size: 1.2rem;
+      border-top-right-radius: 5px;
+      border-top-left-radius: 5px;
     }
     &__header__item {
       flex: 1 1 20%;
       text-align: center;
     }
+    &__content {
+      font-family: 'Chakra Petch', sans-serif;
+      &:nth-child(even) {
+        background-color: rgba(198, 198, 198, 0.3);
+      }
+      &:hover {
+        background-color: rgba(64, 144, 255, 0.35);
+      }
+    }
     &__row {
       display: flex;
       padding: 0.5rem 0;
-      &:nth-of-type(even) {
-        background-color: rgba(64,143,255,.2);
-      }
     }
     &__data {
       flex: 1 1 20%;
@@ -100,8 +127,47 @@ export default {
       padding: 0.5rem;
       border-radius: 5px;
       font-size: 1rem;
+      font-family: 'Chakra Petch', sans-serif;
+      color: #fff;
       &:hover {
         background-color: rgba(64,143,255,.7);
+        color: #000;
+      }
+    }
+  }
+  @media screen and (max-width: 600px) {
+    .table {
+      min-width: 300px;
+      &__header {
+        display: none;
+      }
+      &__row {
+        display: block;
+      }
+      &__data {
+        text-align: left;
+        display: flex;
+        width: 100%;
+        padding: auto 10px;
+        &::before {
+          width: 100%;
+          max-width: 35%;
+          align-self: center;
+          font-weight: 700;
+          font-size: 1.1rem;
+        }
+        &:nth-child(1)::before {
+          content: 'Name';
+        }
+        &:nth-child(2)::before {
+          content: 'Type';
+        }
+        &:nth-child(3)::before {
+          content: 'Year';
+        }
+        &:nth-child(4)::before {
+          content: 'Content';
+        }
       }
     }
   }

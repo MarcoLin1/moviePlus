@@ -6,7 +6,16 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     totalMovies: 0,
-    input: ''
+    input: '',
+    showModal: false,
+    movie: {
+      title: '',
+      year: '',
+      type: '',
+      rating: '',
+      description: '',
+      image: ''
+    }
   },
   mutations: {
     searchingResults (state, data) {
@@ -14,6 +23,22 @@ export default new Vuex.Store({
     },
     getInput (state, text) {
       state.input = text
+    },
+    openModal (state) {
+      state.showModal = true
+    },
+    closeModal (state) {
+      state.showModal = false
+    },
+    getMovieDetailed (state, data) {
+      state.movie = {
+        title: data.Title,
+        year: data.Year,
+        type: data.Type,
+        rating: data.imdbRating,
+        description: data.Plot,
+        image: data.Poster
+      }
     }
   },
   actions: {

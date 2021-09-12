@@ -1,9 +1,9 @@
 import axios from 'axios'
 
-const baseURL = 'http://www.omdbapi.com/?apikey=752b08a&s='
+const searchBaseURL = 'http://www.omdbapi.com/?apikey=752b08a&s='
 
-const axiosInstance = axios.create({
-  baseURL
+const searchAxiosInstance = axios.create({
+  baseURL: searchBaseURL
 })
 
-export const apiHelper = axiosInstance
+export const apiHelper = searchAxiosInstance

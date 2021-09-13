@@ -5,21 +5,63 @@
   >
     <div class="table">
       <div class="table__header">
-        <div class="table__header__item">
-          Name
+        <div
+          class="table__header__item"
+        >
+          <div class="header__name">
+            Name
+          </div>
+          <div class="header__icon__group">
+            <i
+              class="fas fa-sort-up header__icon__up"
+              @click="sorting('Title', 'up')"
+            />
+            <i
+              class="fas fa-sort-down header__icon__down"
+              @click="sorting('Title', 'down')"
+            />
+          </div>
         </div>
-        <div class="table__header__item">
-          Type
+        <div
+          class="table__header__item"
+        >
+          <div class="header__type">
+            Type
+          </div>
+          <div class="header__icon__group">
+            <i
+              class="fas fa-sort-up header__icon__up"
+              @click="sorting('Type', 'up')"
+            />
+            <i
+              class="fas fa-sort-down header__icon__down"
+              @click="sorting('Type', 'dowm')"
+            />
+          </div>
         </div>
-        <div class="table__header__item">
-          Year
+        <div
+          class="table__header__item"
+        >
+          <div class="header__year">
+            Year
+          </div>
+          <div class="header__icon__group">
+            <i
+              class="fas fa-sort-up header__icon__up"
+              @click="sorting('Year', 'up')"
+            />
+            <i
+              class="fas fa-sort-down header__icon__down"
+              @click="sorting('Year', 'down')"
+            />
+          </div>
         </div>
         <div class="table__header__item">
           Content
         </div>
       </div>
       <div
-        v-for="movie in searchingMovies"
+        v-for="movie in sortedMovie"
         :key="movie.imdbID"
         class="table__content"
       >
@@ -35,7 +77,6 @@
           </div>
           <div class="table__data">
             <button
-              :id="movie.imdbID"
               class="table__data__button"
               @click.stop.prevent="showDetail(movie.imdbID)"
             >
@@ -65,13 +106,53 @@ export default {
   },
   data () {
     return {
-      arr: [],
-      currentSort: 'name',
-      currentSortDir: 'asc'
+      searchingResults: [],
+      currentSort: 'Year',
+      currentSortDir: 'desc',
+      sortStatus: 'down'
     }
   },
   computed: {
-    ...mapState(['showData', 'isLoading'])
+    ...mapState(['showData', 'isLoading']),
+    sortedMovie: function () {
+      const copyArr = this.searchingResults.slice(0, 10)
+      // asc排序
+      if (this.currentSortDir === 'asc' && this.sortStatus === 'up') {
+        return copyArr.sort((a, b) => {
+          // number排序
+          if (this.currentSort === 'Year') {
+            return Number(a[this.currentSort]) - Number(b[this.currentSort])
+          } else {
+          // string排序
+            if (a[this.currentSort] < b[this.currentSort]) {
+              return -1
+            }
+          }
+        })
+      // desc排序
+      } else if (this.currentSortDir === 'desc' && this.sortStatus === 'down') {
+        return copyArr.sort((a, b) => {
+          // number排序
+          if (this.currentSort === 'Year') {
+            return Number(b[this.currentSort]) - Number(a[this.currentSort])
+          } else {
+            // string排序
+            if (a[this.currentSort] > b[this.currentSort]) {
+              return -1
+            }
+          }
+        })
+      } else {
+        return 0
+      }
+    }
+  },
+  watch: {
+    searchingMovies (newValue) {
+      this.searchingResults = [
+        ...newValue
+      ]
+    }
   },
   methods: {
     showDetail (id) {
@@ -83,6 +164,16 @@ export default {
           this.$store.commit('openModal')
           this.$store.commit('nowIsLoading')
         })
+    },
+    sorting (sort, status) {
+      this.currentSort = sort
+      if (status === 'down') {
+        this.sortStatus = status
+        this.currentSortDir = 'desc'
+      } else if (status === 'up') {
+        this.sortStatus = status
+        this.currentSortDir = 'asc'
+      }
     }
   }
 }
@@ -116,6 +207,9 @@ export default {
     &__header__item {
       flex: 1 1 20%;
       text-align: center;
+      display: flex;
+      justify-content: space-evenly;
+      align-items: center;
     }
     &__content {
       font-family: 'Chakra Petch', sans-serif;
@@ -147,6 +241,22 @@ export default {
         background-color: rgba(64,143,255,.7);
         color: #000;
       }
+    }
+  }
+  .header {
+    &__icon__up, &__icon__down {
+      cursor: pointer;
+      font-size: 2rem;
+      position: relative;
+      &:hover {
+        color: #53f2b7;
+      }
+    }
+    &__icon__up {
+      top: 7px;
+    }
+    &__icon__down {
+      bottom: 7px;
     }
   }
   @media screen and (max-width: 600px) {

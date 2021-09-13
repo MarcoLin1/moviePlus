@@ -4,9 +4,6 @@
     class="detail__container"
   >
     <div class="detail__wrapper">
-      <div class="spinner__container">
-        <!-- <Spinner v-if="isLoading" /> -->
-      </div>
       <div class="detail__wrapper__header">
         <div class="detail__wrapper__title">
           {{ movie.title }}
@@ -37,7 +34,7 @@
               <span class="detail__subtitle">Type :</span> {{ movie.type }}
             </div>
             <div class="detail__rating">
-              <span class="detail__subtitle">Rating :</span> {{ movie.rating }}
+              <span class="detail__subtitle">Rating :</span> {{ movie.rating === 'N/A' ? '--': movie.rating }}
             </div>
           </div>
           <div class="detail__wrapper__item">
@@ -99,10 +96,10 @@ export default {
      box-shadow: 0 12px 15px 0 rgba(0, 0, 0, 0.25);
    }
    &__wrapper__header {
+     position: relative;
      display: flex;
      justify-content: space-between;
      width: 90%;
-     height: 50px;
      margin: 0 auto;
    }
    &__wrapper__title, &__wrapper__close {
@@ -120,8 +117,8 @@ export default {
      text-align: center;
      background: linear-gradient(to bottom right,#408fff,rgb(64, 144, 255));
      color: #fff;
-     position: relative;
-     top: -50%;
+     position: absolute;
+     top: -20%;
      right: -9%;
      cursor: pointer;
      &:hover {
@@ -175,12 +172,6 @@ export default {
      text-align: left;
    }
   }
-.spinner__container {
-  position: absolute;
-  top: 40%;
-  left: 50%;
-}
-
 @media screen and (max-width: 700px) {
   .detail {
     &__wrapper {

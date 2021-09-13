@@ -1,12 +1,23 @@
 <template>
-  <div class="pagination__container">
+  <div
+    v-if="showData"
+    class="pagination__container"
+  >
     <ul class="pagination__wrapper">
-      <li class="pagination__pre">
-        <a
-          href=""
-          @click.stop.prevent="minusPageNum(currentPage - 10)"
-        >&lt;</a>
-      </li>
+      <div class="pagination__pre__group">
+        <li class="pagination__pre">
+          <a
+            href=""
+            @click.stop.prevent="minusPageNum(currentPage - 10)"
+          >&lt;&lt;</a>
+        </li>
+        <li class="pagination__pre">
+          <a
+            href=""
+            @click.stop.prevent="minusPageNum(currentPage - 1)"
+          >&lt;</a>
+        </li>
+      </div>
       <li class="pagination__numbers">
         <a
           v-for="index in pages"
@@ -16,12 +27,20 @@
           @click.stop.prevent="updatePage(index)"
         >{{ index }}</a>
       </li>
-      <li class="pagination__next">
-        <a
-          href=""
-          @click.stop.prevent="addPageNum(currentPage + 10)"
-        >&gt;</a>
-      </li>
+      <div class="pagination__next__group">
+        <li class="pagination__next pagination__next__update">
+          <a
+            href=""
+            @click.stop.prevent="updatePage(currentPage + 1)"
+          >&gt;</a>
+        </li>
+        <li class="pagination__next">
+          <a
+            href=""
+            @click.stop.prevent="addPageNum(currentPage + 10)"
+          >&gt;&gt;</a>
+        </li>
+      </div>
     </ul>
   </div>
 </template>
@@ -36,26 +55,36 @@ export default {
     }
   },
   computed: {
-    ...mapState(['totalMovies', 'input']),
+    ...mapState(['totalMovies', 'input', 'showData']),
     endPage () {
       if (this.totalMovies > 10 && this.currentPage > 10 && this.currentPage < this.totalMovies) {
-        if ((this.currentPage + 9) > this.totalMovies) {
+        if ((this.currentPage + 10) > this.totalMovies) {
           return this.totalMovies
         }
         return this.currentPage + 9
+      } else if (this.totalMovies < 10) {
+        return this.totalMovies
       }
       return 10
     },
     pages () {
       const range = []
-      if ((this.endPage - this.currentPage) <= 10 && this.currentPage <= 10) {
+      // 總筆數少於10筆
+      if ((this.endPage - this.currentPage) <= 10 && this.currentPage <= 10 && this.totalMovies <= 10) {
+        for (let i = 1; i <= this.totalMovies; i++) {
+          range.push(i)
+        }
+      // 總筆數超過10筆，第一頁
+      } else if ((this.endPage - this.currentPage) <= 10 && this.currentPage <= 10) {
         for (let i = 1; i <= 10; i++) {
           range.push(i)
         }
-      } else if ((this.totalMovies - this.currentPage) <= 10) {
-        for (let i = this.totalMovies - 10; i <= this.totalMovies; i++) {
+      // 最後一頁
+      } else if ((this.totalMovies - this.currentPage) < 10) {
+        for (let i = this.totalMovies - 9; i <= this.totalMovies; i++) {
           range.push(i)
         }
+      // 其他換頁
       } else if ((this.endPage - this.currentPage) <= 10 && this.currentPage > 10) {
         for (let i = this.currentPage; i <= this.endPage; i++) {
           range.push(i)
@@ -102,7 +131,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap');
+@import '../assets/SCSS/main.scss';
   .pagination {
     &__container {
       width: 90%;
@@ -124,14 +153,14 @@ export default {
       padding: 0 10px;
       width: 10%;
       height: 52px;
-      box-shadow: 6px 6px 6px #0000002b;
+      @extend %box-shadow-style;
       & a {
         font-size: 1.5rem;
         font-weight: bold;
         display: block;
       }
       &:hover {
-        background-color: rgb(94, 233, 182);
+        background-color: $light-green;
         border: none;
         box-shadow: none;
       }
@@ -139,32 +168,42 @@ export default {
         color: #fff;
       }
     }
+    &__pre__group {
+      display: flex;
+    }
     &__pre {
       border-top-left-radius: 10px;
       border-bottom-left-radius: 10px;
       margin-right: 5px;
+      width: 50px;
+    }
+    &__next__group {
+      display: flex;
     }
     &__next {
       border-top-right-radius: 10px;
       border-bottom-right-radius: 10px;
       margin-left: 5px;
+      width: 50px;
+    }
+    &__next__update {
+      width: 50px;
     }
     &__numbers {
       width: 100%;
-      display: grid;
-      grid-template-columns: repeat(10, 1fr);
+      display: flex;
       grid-gap: 5px;
       line-height: 50px;
       a {
         width: 100%;
         &:hover {
-          background-color: rgb(94, 233, 182);
+          background-color: $light-green;
           color: #fff;
         }
       }
     }
     &__number {
-      box-shadow: 6px 6px 6px #0000002b;
+      @extend %box-shadow-style;
       &:hover {
         box-shadow: none;
         margin: 0 5px;
@@ -172,7 +211,7 @@ export default {
     }
   }
   .active {
-    background-color: rgb(94, 233, 182);
+    background-color: $light-green;
     color: #fff;
     box-shadow: none;
     margin: 0 5px;
@@ -187,12 +226,18 @@ export default {
         min-width: 50px;
         margin-bottom: 10px;
       }
+      &__next__group {
+        justify-content: flex-end;
+      }
       &__next {
         min-width: 50px;
-        margin: 10px 0 0 auto;
+        margin: 10px 0 10px 0;
+      }
+      &__next__update {
+        margin-right: 5px;
       }
       &__numbers {
-        grid-template-columns: repeat(5, 1fr);
+        min-width: 300px;
       }
     }
   }

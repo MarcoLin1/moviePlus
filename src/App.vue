@@ -12,7 +12,7 @@
 </template>
 
 <style lang="scss">
-@import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
+@import './assets/SCSS/main.scss';
 * {
   box-sizing: border-box;
 }
@@ -28,8 +28,8 @@ a {
   text-align: center;
   justify-content: center;
   align-items: center;
-  background-color: #71aaff95;
-  box-shadow: 6px 6px 6px rgba(0, 0, 0, 0.1);
+  background-color: $light-blue;
+  @extend %box-shadow-style;
   font-family: 'Lobster', cursive;
   span {
     font-size: 2rem;
@@ -39,7 +39,7 @@ a {
   .header__text {
     font-size: 1.5rem;
     font-weight: 600;
-    color: #53f2b7;
+    color: $light-green;
   }
 }
 </style>

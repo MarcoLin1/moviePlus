@@ -1,0 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Acme&family=Chakra+Petch:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
+
+@mixin text-style ($size, $weight, $color) {
+  font-size: $size;
+  font-weight: $weight;
+  color: $color;
+}
+
+$light-blue: #71aaff95;
+$light-green: #53f2b7;
+
+%box-shadow-style {
+  box-shadow: 6px 6px 6px #0000002b;
+}
+

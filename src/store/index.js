@@ -8,6 +8,8 @@ export default new Vuex.Store({
     totalMovies: 0,
     input: '',
     showModal: false,
+    showData: false,
+    isLoading: false,
     movie: {
       title: '',
       year: '',
@@ -20,6 +22,7 @@ export default new Vuex.Store({
   mutations: {
     searchingResults (state, data) {
       state.totalMovies = Math.ceil(data / 10)
+      state.showData = true
     },
     getInput (state, text) {
       state.input = text
@@ -39,6 +42,9 @@ export default new Vuex.Store({
         description: data.Plot,
         image: data.Poster
       }
+    },
+    nowIsLoading (state) {
+      state.isLoading = !state.isLoading
     }
   },
   actions: {

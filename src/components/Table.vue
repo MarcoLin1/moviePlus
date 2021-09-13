@@ -1,5 +1,8 @@
 <template>
-  <div class="table__container">
+  <div
+    v-if="showData"
+    class="table__container"
+  >
     <div class="table">
       <div class="table__header">
         <div class="table__header__item">
@@ -42,31 +45,43 @@
         </div>
       </div>
     </div>
+    <Detail />
   </div>
 </template>
 
 <script>
 import axios from 'axios'
+import { mapState } from 'vuex'
+import Detail from './Detail.vue'
 export default {
   components: {
+    Detail
   },
   props: {
     searchingMovies: {
-      type: Array
+      type: Array,
+      default: () => []
     }
   },
   data () {
     return {
-      movies: this.searchingMovies
+      arr: [],
+      currentSort: 'name',
+      currentSortDir: 'asc'
     }
+  },
+  computed: {
+    ...mapState(['showData', 'isLoading'])
   },
   methods: {
     showDetail (id) {
+      this.$store.commit('nowIsLoading')
       axios.get(`http://www.omdbapi.com/?apikey=752b08a&i=${id}&plot=full`)
         .then(response => {
           const { data } = response
           this.$store.commit('getMovieDetailed', data)
           this.$store.commit('openModal')
+          this.$store.commit('nowIsLoading')
         })
     }
   }
@@ -74,7 +89,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap');
+@import '../assets/SCSS/main.scss';
   .table {
     width: 100%;
     border-radius: 5px;
@@ -94,8 +109,7 @@ export default {
       padding: 1rem 0;
       background-color: rgba(64, 144, 255, 0.783);
       font-family: 'Chakra Petch', sans-serif;
-      font-weight: 700;
-      font-size: 1.2rem;
+      @include text-style(1.2rem, 700, #000);
       border-top-right-radius: 5px;
       border-top-left-radius: 5px;
     }
@@ -109,7 +123,7 @@ export default {
         background-color: rgba(198, 198, 198, 0.3);
       }
       &:hover {
-        background-color: rgba(64, 144, 255, 0.35);
+        background-color: $light-blue;
       }
     }
     &__row {
@@ -153,8 +167,7 @@ export default {
           width: 100%;
           max-width: 35%;
           align-self: center;
-          font-weight: 700;
-          font-size: 1.1rem;
+          @include text-style(1.1rem, 700, #000);
         }
         &:nth-child(1)::before {
           content: 'Name';
@@ -169,6 +182,11 @@ export default {
           content: 'Content';
         }
       }
+      &__data__button {
+        padding: 0 5px;
+        height: 30px;
+      }
     }
   }
+
 </style>

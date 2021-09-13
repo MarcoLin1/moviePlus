@@ -4,6 +4,9 @@
     class="detail__container"
   >
     <div class="detail__wrapper">
+      <div class="spinner__container">
+        <!-- <Spinner v-if="isLoading" /> -->
+      </div>
       <div class="detail__wrapper__header">
         <div class="detail__wrapper__title">
           {{ movie.title }}
@@ -20,13 +23,13 @@
       <div class="detail__wrapper__content">
         <div class="detail__wrapper__item detail__wrapper__image">
           <img
-            :src="movie.image"
+            :src="movie.image | emptyImage"
             alt=""
             class="detail__image"
           >
         </div>
         <div class="detail__wrapper__text">
-          <div class="detail__wrapper__item">
+          <div class="detail__wrapper__item detail__wrapper__information">
             <div class="detail__year">
               <span class="detail__subtitle">Year :</span>  {{ movie.year }}
             </div>
@@ -39,7 +42,7 @@
           </div>
           <div class="detail__wrapper__item">
             <div class="detail__description">
-              {{ movie.description }}
+              {{ movie.description | emptyText }}
             </div>
           </div>
         </div>
@@ -50,7 +53,14 @@
 
 <script>
 import { mapState } from 'vuex'
+import { emptyFilter } from '../utils/mixins'
 export default {
+  mixins: [emptyFilter],
+  props: {
+    initialIsLoading: {
+      type: Boolean
+    }
+  },
   data () {
     return {
     }
@@ -67,21 +77,24 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import url('https://fonts.googleapis.com/css2?family=Acme&family=Chakra+Petch:ital,wght@0,400;0,500;1,400;1,500&display=swap');
+@import '../assets/SCSS/main.scss';
   .detail {
    &__container {
      width: 100%;
      height: 100vh;
-     background-color: rgba(0, 0, 0, 0.406);
+     background-color: rgba(0, 0, 0, 0.40);
      display: flex;
      align-items: center;
      position: fixed;
      top: 0;
+     left: 0;
    }
    &__wrapper {
+     position: relative;
      background-color: #fff;
      width: 85%;
      max-width: 800px;
+     max-height: 735px;
      margin: 0 auto;
      box-shadow: 0 12px 15px 0 rgba(0, 0, 0, 0.25);
    }
@@ -96,8 +109,7 @@ export default {
      line-height: 50px;
    }
    &__wrapper__title {
-     font-size: 2rem;
-     font-weight: 700;
+     @include text-style(1.6rem, 700, #000);
      padding-top: 10px;
      font-family: 'Acme', sans-serif;
    }
@@ -128,14 +140,17 @@ export default {
      margin: 20px auto;
    }
    &__wrapper__image {
-     padding: 20px;
+     padding: 0 20px;
+   }
+   &__wrapper__text {
+     width: 100%;
    }
    &__image {
      display: flex;
      justify-content: center;
      width: fit-content;
      height: fit-content;
-     box-shadow: 6px 6px 6px #0000002b;
+     @extend %box-shadow-style;
    }
    &__year, &__type, &__rating {
      font-family: 'Chakra Petch', sans-serif;
@@ -149,11 +164,45 @@ export default {
    }
    &__description {
      width: 90%;
-     line-height: 1.5rem;
-     font-size: 0.9rem;
-     color: #868686;
-     font-weight: 500;
+     height: auto;
+     max-height: 400px;
+     padding: 5px 10px 5px 10px;
+     outline: 1px solid #eeeeee;
+     overflow-y: auto;
+     line-height: 1.2rem;
+     @include text-style(0.9rem, 500, #868686);
      font-family: 'Chakra Petch', sans-serif;
+     text-align: left;
    }
   }
+.spinner__container {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+}
+
+@media screen and (max-width: 700px) {
+  .detail {
+    &__wrapper {
+      min-width: 380px;
+    }
+    &__wrapper__title {
+      font-size: 1.2rem;
+    }
+    &__wrapper__image {
+      display: none;
+    }
+    &__wrapper__content {
+      padding: 0;
+    }
+    &__wrapper__information {
+      width: 90%;
+      justify-content: space-between;
+    }
+    &__description {
+      outline: none;
+      padding: 0;
+    }
+  }
+}
 </style>

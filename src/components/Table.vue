@@ -198,9 +198,9 @@ export default {
       display: flex;
       width: 100%;
       padding: 1rem 0;
-      background-color: rgba(64, 144, 255, 0.783);
+      background-color: #143156;
       font-family: 'Chakra Petch', sans-serif;
-      @include text-style(1.2rem, 700, #000);
+      @include text-style(1.2rem, 700, #fff);
       border-top-right-radius: 5px;
       border-top-left-radius: 5px;
     }
@@ -217,7 +217,7 @@ export default {
         background-color: rgba(198, 198, 198, 0.3);
       }
       &:hover {
-        background-color: $light-blue;
+        background-color: #cccccc9c;
       }
     }
     &__row {
@@ -231,13 +231,13 @@ export default {
       align-self: center;
     }
     &__data__button {
-      background-color: rgba(64,143,255,.5);
+      background-color: #143156;
       padding: 0.5rem;
       border-radius: 5px;
       @include text-style(1rem, 400, #fff);
       font-family: 'Chakra Petch', sans-serif;
       &:hover {
-        background-color: rgba(64,143,255,.7);
+        background-color: #1431565b;
         color: #000;
       }
     }

@@ -159,13 +159,14 @@ export default {
       @extend %box-shadow-style;
       @include border-style (1px, solid, #eeeeee, 5px);
       &:focus {
-        border: 1px solid $border-blue;
+        border: 1px solid #133156;
         box-shadow: none;
       }
     }
     &__button {
-      color: $header-text-blue;
-      @include border-style (1px, solid, $border-blue, 5px);
+      color: #fff;
+      background-color: #133156;
+      @include border-style (1px, solid, #133156, 5px);
       margin-left: 15px;
       font-family: 'Chakra Petch', sans-serif;
       font-size: 1.1rem;
@@ -188,7 +189,7 @@ export default {
       position: relative;
     }
     &__label {
-      @include text-style (1rem, 500, #000);
+      @include text-style (1rem, 500, #133156);
       font-family: 'Chakra Petch', sans-serif;
       cursor: pointer;
       &:hover {
@@ -200,12 +201,12 @@ export default {
     }
     &__inline__checkbox {
       @include checkbox-style (18px, 18px, 50%, relative, inline-block);
-      border: 1px solid $border-blue;
+      border: 1px solid #133156;
       top: 4px;
       &::after {
         content: '';
-        @include checkbox-style (11px, 11px, 50%, relative, block);
-        background-color: $header-text-blue;
+        @include checkbox-style (12px, 12px, 50%, relative, block);
+        background-color: #133156;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);

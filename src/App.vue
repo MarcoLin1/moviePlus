@@ -2,7 +2,7 @@
   <div id="app">
     <header class="header__container">
       <router-link to="/">
-        <span>Omnichat<span class="header__text">Movie</span></span>
+        <span>Movie<span class="header__text">Plus+</span></span>
       </router-link>
     </header>
     <main>
@@ -28,7 +28,7 @@ a {
   text-align: center;
   justify-content: center;
   align-items: center;
-  background-color: $light-blue;
+  background-color: #133156;
   @extend %box-shadow-style;
   font-family: 'Lobster', cursive;
   span {

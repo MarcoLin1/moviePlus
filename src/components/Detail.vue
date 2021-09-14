@@ -3,7 +3,10 @@
     v-if="showModal"
     class="detail__container"
   >
-    <div class="detail__wrapper">
+    <div
+      v-if="showModal"
+      class="detail__wrapper"
+    >
       <div class="detail__wrapper__header">
         <div class="detail__wrapper__title">
           {{ movie.title }}
@@ -129,7 +132,7 @@ export default {
      height: 100%;
      position: relative;
      display: flex;
-     padding: 20px;
+     padding: 0 20px 20px 20px;
    }
    &__wrapper__item {
      display: flex;
@@ -150,13 +153,11 @@ export default {
      @extend %box-shadow-style;
    }
    &__year, &__type, &__rating {
+     @include text-style (1rem, 500, #000);
      font-family: 'Chakra Petch', sans-serif;
-     font-weight: 500;
-     font-size: 1rem;
    }
    &__subtitle {
-     font-weight: 700;
-     font-size: 1.3rem;
+     @include text-style (1.3rem, 700, #000);
      font-family: 'Acme', sans-serif;
    }
    &__description {
@@ -166,8 +167,8 @@ export default {
      padding: 5px 10px 5px 10px;
      outline: 1px solid #eeeeee;
      overflow-y: auto;
-     line-height: 1.2rem;
-     @include text-style(0.9rem, 500, #868686);
+     line-height: 1.5rem;
+     @include text-style(1rem, 500, #868686);
      font-family: 'Chakra Petch', sans-serif;
      text-align: left;
    }

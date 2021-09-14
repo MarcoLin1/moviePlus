@@ -152,13 +152,12 @@ export default {
     }
     &__input {
       width: 100%;
-      @extend %box-shadow-style;
-      padding-left: 10px;
       height: 40px;
-      border-radius: 5px;
-      border: 1px solid #eeeeee;
+      padding-left: 10px;
       letter-spacing: 0.5px;
       font-family: 'Chakra Petch', sans-serif;
+      @extend %box-shadow-style;
+      @include border-style (1px, solid, #eeeeee, 5px);
       &:focus {
         border: 1px solid $border-blue;
         box-shadow: none;
@@ -166,8 +165,7 @@ export default {
     }
     &__button {
       color: $header-text-blue;
-      border: 1px solid $border-blue;
-      border-radius: 5px;
+      @include border-style (1px, solid, $border-blue, 5px);
       margin-left: 15px;
       font-family: 'Chakra Petch', sans-serif;
       font-size: 1.1rem;
@@ -190,7 +188,12 @@ export default {
       position: relative;
     }
     &__label {
-      @include text-style (1rem, 400, $header-text-blue);
+      @include text-style (1rem, 500, #000);
+      font-family: 'Chakra Petch', sans-serif;
+      cursor: pointer;
+      &:hover {
+        color: $header-text-blue;
+      }
     }
     &__checkbox {
       display: none;
@@ -198,7 +201,7 @@ export default {
     &__inline__checkbox {
       @include checkbox-style (18px, 18px, 50%, relative, inline-block);
       border: 1px solid $border-blue;
-      top: 2px;
+      top: 4px;
       &::after {
         content: '';
         @include checkbox-style (11px, 11px, 50%, relative, block);
@@ -209,6 +212,9 @@ export default {
         opacity: 0;
         transition: 0.6s ease-in;
       }
+    }
+    &__checkbox:checked ~ &__label {
+      color: $header-text-blue;
     }
     &__checkbox:checked ~ &__label &__inline__checkbox::after {
       opacity: 1;

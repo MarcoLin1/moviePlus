@@ -161,8 +161,8 @@ export default {
         .then(response => {
           const { data } = response
           this.$store.commit('getMovieDetailed', data)
-          this.$store.commit('openModal')
           this.$store.commit('nowIsLoading')
+          this.$store.commit('openModal')
         })
     },
     sorting (sort, status) {
@@ -184,7 +184,7 @@ export default {
   .table {
     width: 100%;
     border-radius: 5px;
-    box-shadow: 6px 6px 6px #0000002b;
+    @extend %box-shadow-style;
     &__container {
       display: flex;
       justify-content: center;
@@ -234,9 +234,8 @@ export default {
       background-color: rgba(64,143,255,.5);
       padding: 0.5rem;
       border-radius: 5px;
-      font-size: 1rem;
+      @include text-style(1rem, 400, #fff);
       font-family: 'Chakra Petch', sans-serif;
-      color: #fff;
       &:hover {
         background-color: rgba(64,143,255,.7);
         color: #000;
@@ -249,7 +248,7 @@ export default {
       font-size: 2rem;
       position: relative;
       &:hover {
-        color: #53f2b7;
+        color: $light-green;
       }
     }
     &__icon__up {
@@ -298,5 +297,4 @@ export default {
       }
     }
   }
-
 </style>

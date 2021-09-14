@@ -7,10 +7,28 @@
   color: $color;
 }
 
+@mixin checkbox-style ($width, $height, $border-radius, $position, $display) {
+  width: $width;
+  height: $height;
+  border-radius: $border-radius;
+  position: $position;
+  display: $display;
+}
+
+@mixin border-style ($border-width, $border-style, $border-color, $border-radius) {
+  border-width: $border-width;
+  border-style: $border-style;
+  border-color: $border-color;
+  border-radius: $border-radius;
+}
+
 $light-blue: #71aaff95;
+$header-text-blue: #118eee;
+$border-blue: #aecfff;
 $light-green: #53f2b7;
 
 %box-shadow-style {
   box-shadow: 6px 6px 6px #0000002b;
 }
+
 

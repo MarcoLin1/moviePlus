@@ -157,7 +157,7 @@ export default {
   methods: {
     showDetail (id) {
       this.$store.commit('nowIsLoading')
-      axios.get(`http://www.omdbapi.com/?apikey=752b08a&i=${id}&plot=full`)
+      axios.get(`https://www.omdbapi.com/?apikey=752b08a&i=${id}&plot=full`)
         .then(response => {
           const { data } = response
           this.$store.commit('getMovieDetailed', data)

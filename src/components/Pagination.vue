@@ -8,12 +8,7 @@
         <li class="pagination__pre">
           <a
             href=""
-            @click.stop.prevent="minusPageNum(currentPage - 10)"
-          >&lt;&lt;</a>
-        </li>
-        <li class="pagination__pre">
-          <a
-            href=""
+            class="pagination__pre__icon"
             @click.stop.prevent="updatePage(currentPage - 1)"
           >&lt;</a>
         </li>
@@ -22,7 +17,7 @@
         <a
           v-for="index in pages"
           :key="index"
-          :class="index === 1 ? 'active': ''"
+          :class="currentPage === index ? 'active':''"
           href=""
           class="pagination__number"
           @click.stop.prevent="updatePage(index)"
@@ -32,14 +27,9 @@
         <li class="pagination__next pagination__next__update">
           <a
             href=""
+            class="pagination__next__icon"
             @click.stop.prevent="updatePage(currentPage + 1)"
           >&gt;</a>
-        </li>
-        <li class="pagination__next">
-          <a
-            href=""
-            @click.stop.prevent="addPageNum(currentPage + 10)"
-          >&gt;&gt;</a>
         </li>
       </div>
     </ul>
@@ -86,7 +76,7 @@ export default {
         }
       // 其他換頁
       } else if ((this.endPage - this.currentPage) <= 10 && this.currentPage > 10) {
-        for (let i = this.currentPage; i <= this.endPage; i++) {
+        for (let i = this.currentPage - 1; i <= this.endPage - 1; i++) {
           range.push(i)
         }
       }
@@ -94,24 +84,17 @@ export default {
     }
   },
   methods: {
-    async updatePage (pageNum) {
+    updatePage (pageNum) {
+      if (this.endPage < this.currentPage) {
+        return
+      }
+      if (pageNum === 0) {
+        return
+      }
       this.$store.commit('nowIsLoading')
       this.currentPage = pageNum
       this.$store.commit('getPageNum', pageNum)
       this.changePageStyle()
-      this.$store.commit('nowIsLoading')
-    },
-    addPageNum (pageNum) {
-      if (this.endPage < this.currentPage) {
-        return
-      }
-      this.currentPage = pageNum
-    },
-    minusPageNum (pageNum) {
-      if (this.currentPage <= 10) {
-        return
-      }
-      this.currentPage = pageNum
     },
     changePageStyle () {
       const allPageNum = document.querySelectorAll('.pagination__number')

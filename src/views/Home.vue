@@ -113,6 +113,7 @@ export default {
         })
           .then(response => {
             this.movies = response.data.Search
+            this.$store.commit('nowIsLoading')
           })
       }
     }

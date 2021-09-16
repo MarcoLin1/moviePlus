@@ -22,6 +22,7 @@
         <a
           v-for="index in pages"
           :key="index"
+          :class="index === 1 ? 'active': ''"
           href=""
           class="pagination__number"
           @click.stop.prevent="updatePage(index)"
@@ -47,7 +48,6 @@
 
 <script>
 import { mapState } from 'vuex'
-import movies from './../apis/movies'
 export default {
   data () {
     return {
@@ -97,9 +97,8 @@ export default {
     async updatePage (pageNum) {
       this.$store.commit('nowIsLoading')
       this.currentPage = pageNum
+      this.$store.commit('getPageNum', pageNum)
       this.changePageStyle()
-      const { data } = await movies.getMoviesByPage({ keyword: this.input, page: pageNum })
-      this.$emit('current-page-movies', data.Search)
       this.$store.commit('nowIsLoading')
     },
     addPageNum (pageNum) {

@@ -8,8 +8,8 @@ export default {
   getMovies ({ keyword }) {
     return axiosInstance.get(`?apikey=752b08a&s=${keyword}`)
   },
-  getMoviesByPage ({ keyword, page }) {
-    return axiosInstance.get(`?apikey=752b08a&s=${keyword}&page=${page}`)
+  getMoviesByPage ({ keyword, page, type }) {
+    return axiosInstance.get(`?apikey=752b08a&s=${keyword}&page=${page}&type=${type}`)
   },
   getMoviesByType ({ keyword, type }) {
     return axiosInstance.get(`?apikey=752b08a&s=${keyword}&type=${type}`)

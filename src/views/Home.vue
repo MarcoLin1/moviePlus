@@ -103,8 +103,22 @@ export default {
       movies: []
     }
   },
+  watch: {
+    nowPage (newValue) {
+      if (newValue) {
+        movies.getMoviesByPage({
+          keyword: this.inputText,
+          page: newValue,
+          type: this.typeValue
+        })
+          .then(response => {
+            this.movies = response.data.Search
+          })
+      }
+    }
+  },
   computed: {
-    ...mapState(['isLoading'])
+    ...mapState(['isLoading', 'nowPage', 'typeValue'])
   },
   methods: {
     async searching () {
@@ -114,6 +128,7 @@ export default {
       checkboxs.forEach(checkbox => {
         if (checkbox.checked) {
           typeValue = checkbox.value
+          this.$store.commit('getType', typeValue)
         }
       })
       if (typeValue === '') {
@@ -128,7 +143,6 @@ export default {
       }
       this.$store.commit('getInput', this.inputText)
       this.$store.commit('nowIsLoading')
-      // this.inputText = ''
     },
     getCurrentMovies (movies) {
       this.movies = movies

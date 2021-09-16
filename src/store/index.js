@@ -10,6 +10,8 @@ export default new Vuex.Store({
     showModal: false,
     showData: false,
     isLoading: false,
+    typeValue: '',
+    nowPage: 0,
     movie: {
       title: '',
       year: '',
@@ -45,6 +47,12 @@ export default new Vuex.Store({
     },
     nowIsLoading (state) {
       state.isLoading = !state.isLoading
+    },
+    getType (state, data) {
+      state.typeValue = data
+    },
+    getPageNum (state, data) {
+      state.nowPage = data
     }
   },
   actions: {

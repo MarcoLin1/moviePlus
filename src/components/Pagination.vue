@@ -14,7 +14,7 @@
         <li class="pagination__pre">
           <a
             href=""
-            @click.stop.prevent="minusPageNum(currentPage - 1)"
+            @click.stop.prevent="updatePage(currentPage - 1)"
           >&lt;</a>
         </li>
       </div>
@@ -47,7 +47,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import { apiHelper } from '../utils/helper'
+import movies from './../apis/movies'
 export default {
   data () {
     return {
@@ -95,10 +95,12 @@ export default {
   },
   methods: {
     async updatePage (pageNum) {
+      this.$store.commit('nowIsLoading')
       this.currentPage = pageNum
       this.changePageStyle()
-      const { data } = await apiHelper.get(`${this.input}&page=${pageNum}`)
+      const { data } = await movies.getMoviesByPage({ keyword: this.input, page: pageNum })
       this.$emit('current-page-movies', data.Search)
+      this.$store.commit('nowIsLoading')
     },
     addPageNum (pageNum) {
       if (this.endPage < this.currentPage) {

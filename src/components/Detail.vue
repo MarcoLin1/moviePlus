@@ -1,10 +1,8 @@
 <template>
   <div
-    v-if="showModal"
     class="detail__container"
   >
     <div
-      v-if="showModal"
       class="detail__wrapper"
     >
       <div class="detail__wrapper__header">
@@ -65,6 +63,19 @@ export default {
     return {
     }
   },
+  watch: {
+    showModal (newValue, oldValue) {
+      const wrapper = document.querySelector('.detail__wrapper')
+      const container = document.querySelector('.detail__container')
+      if (newValue === true) {
+        wrapper.classList.add('fade__in')
+        container.classList.add('fade__in')
+      } else {
+        wrapper.classList.remove('fade__in')
+        container.classList.remove('fade__in')
+      }
+    }
+  },
   computed: {
     ...mapState(['showModal', 'movie'])
   },
@@ -88,6 +99,8 @@ export default {
      position: fixed;
      top: 0;
      left: 0;
+     transition: 0.8s ease-in;
+     visibility: hidden;
    }
    &__wrapper {
      position: relative;
@@ -97,6 +110,9 @@ export default {
      max-height: 735px;
      margin: 0 auto;
      box-shadow: 0 12px 15px 0 rgba(0, 0, 0, 0.25);
+     transition: 0.8s ease-in;
+     visibility: hidden;
+     transform: translateY(-200%);
    }
    &__wrapper__header {
      position: relative;
@@ -172,6 +188,11 @@ export default {
      font-family: 'Chakra Petch', sans-serif;
      text-align: left;
    }
+  }
+  .fade__in {
+    transition: 0.8s ease-in-out;
+    visibility: visible;
+    transform: translateY(0);
   }
 @media screen and (max-width: 700px) {
   .detail {

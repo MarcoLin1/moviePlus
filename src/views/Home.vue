@@ -86,7 +86,7 @@
 import Table from '@/components/Table.vue'
 import Pagination from '@/components/Pagination.vue'
 import Spinner from '@/components/Spinner.vue'
-import { apiHelper } from '../utils/helper'
+import movies from './../apis/movies'
 import { mapState } from 'vuex'
 
 export default {
@@ -117,18 +117,18 @@ export default {
         }
       })
       if (typeValue === '') {
-        const { data } = await apiHelper.get(`${this.inputText}`)
+        const { data } = await movies.getMovies({ keyword: this.inputText })
         this.movies = data.Search
         this.$store.commit('searchingResults', Number(data.totalResults))
       }
       if (typeValue !== '') {
-        const { data } = await apiHelper.get(`${this.inputText}&type=${typeValue}`)
+        const { data } = await movies.getMoviesByType({ keyword: this.inputText, type: typeValue })
         this.movies = data.Search
         this.$store.commit('searchingResults', Number(data.totalResults))
       }
       this.$store.commit('getInput', this.inputText)
       this.$store.commit('nowIsLoading')
-      this.inputText = ''
+      // this.inputText = ''
     },
     getCurrentMovies (movies) {
       this.movies = movies

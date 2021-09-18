@@ -1,6 +1,5 @@
 <template>
   <div
-    v-if="showData"
     class="pagination__container"
   >
     <ul class="pagination__wrapper">

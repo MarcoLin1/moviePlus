@@ -1,92 +1,117 @@
 <template>
-  <div
-    v-if="showData"
-    class="table__container"
-  >
-    <div class="table">
-      <div class="table__header">
-        <div
-          class="table__header__item"
-        >
-          <div class="header__name">
-            Name
-          </div>
-          <div class="header__icon__group">
-            <i
-              class="fas fa-sort-up header__icon__up"
-              @click="sorting('Title', 'up')"
-            />
-            <i
-              class="fas fa-sort-down header__icon__down"
-              @click="sorting('Title', 'down')"
-            />
-          </div>
-        </div>
-        <div
-          class="table__header__item"
-        >
-          <div class="header__type">
-            Type
-          </div>
-          <div class="header__icon__group">
-            <i
-              class="fas fa-sort-up header__icon__up"
-              @click="sorting('Type', 'up')"
-            />
-            <i
-              class="fas fa-sort-down header__icon__down"
-              @click="sorting('Type', 'dowm')"
-            />
-          </div>
-        </div>
-        <div
-          class="table__header__item"
-        >
-          <div class="header__year">
-            Year
-          </div>
-          <div class="header__icon__group">
-            <i
-              class="fas fa-sort-up header__icon__up"
-              @click="sorting('Year', 'up')"
-            />
-            <i
-              class="fas fa-sort-down header__icon__down"
-              @click="sorting('Year', 'down')"
-            />
-          </div>
-        </div>
-        <div class="table__header__item">
-          Content
-        </div>
+  <div class="table__background">
+    <div class="table__navbar__wrapper">
+      <Navbar />
+      <div class="table__search__bar__wrapper">
+        <SearchBar />
       </div>
-      <div
-        v-for="movie in sortedMovie"
-        :key="movie.imdbID"
-        class="table__content"
-      >
-        <div class="table__row">
-          <div class="table__data">
-            {{ movie.Title }}
-          </div>
-          <div class="table__data">
-            {{ movie.Type }}
-          </div>
-          <div class="table__data">
-            {{ movie.Year }}
-          </div>
-          <div class="table__data">
-            <button
-              class="table__data__button"
-              @click.stop.prevent="showDetail(movie.imdbID)"
-            >
-              Detail
-            </button>
-          </div>
+      <div class="table__icons__wrapper">
+        <div class="table__icon__list">
+          <i
+            class="fas fa-list fa-lg table__icon"
+            @click.stop.prevent="changeView('table')"
+          />
+        </div>
+        <div class="table__icon__table">
+          <i
+            class="fa fa-th fa-lg table__icon"
+            aria-hidden="true"
+            @click.stop.prevent="changeView('card')"
+          />
         </div>
       </div>
     </div>
-    <Detail />
+    <div
+      v-if="showData"
+      class="table__container"
+    >
+      <div class="table">
+        <div class="table__header">
+          <div
+            class="table__header__item"
+          >
+            <div class="header__name">
+              Name
+            </div>
+            <div class="header__icon__group">
+              <i
+                class="fas fa-sort-up header__icon__up"
+                @click="sorting('Title', 'up')"
+              />
+              <i
+                class="fas fa-sort-down header__icon__down"
+                @click="sorting('Title', 'down')"
+              />
+            </div>
+          </div>
+          <div
+            class="table__header__item"
+          >
+            <div class="header__type">
+              Type
+            </div>
+            <div class="header__icon__group">
+              <i
+                class="fas fa-sort-up header__icon__up"
+                @click="sorting('Type', 'up')"
+              />
+              <i
+                class="fas fa-sort-down header__icon__down"
+                @click="sorting('Type', 'dowm')"
+              />
+            </div>
+          </div>
+          <div
+            class="table__header__item"
+          >
+            <div class="header__year">
+              Year
+            </div>
+            <div class="header__icon__group">
+              <i
+                class="fas fa-sort-up header__icon__up"
+                @click="sorting('Year', 'up')"
+              />
+              <i
+                class="fas fa-sort-down header__icon__down"
+                @click="sorting('Year', 'down')"
+              />
+            </div>
+          </div>
+          <div class="table__header__item">
+            Content
+          </div>
+        </div>
+        <div
+          v-for="movie in movies"
+          :key="movie.imdbID"
+          class="table__content"
+        >
+          <div class="table__row">
+            <div class="table__data">
+              {{ movie.Title }}
+            </div>
+            <div class="table__data">
+              {{ movie.Type }}
+            </div>
+            <div class="table__data">
+              {{ movie.Year }}
+            </div>
+            <div class="table__data">
+              <button
+                class="table__data__button"
+                @click.stop.prevent="showDetail(movie.imdbID)"
+              >
+                Detail
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <Detail />
+      <Spinner v-if="isLoading" />
+      <Pagination />
+    </div>
   </div>
 </template>
 
@@ -94,15 +119,19 @@
 import axios from 'axios'
 import { mapState } from 'vuex'
 import Detail from './Detail.vue'
+import Navbar from './Navbar.vue'
+import SearchBar from './SearchBar.vue'
+import Pagination from './Pagination.vue'
+import moviesAPI from './../apis/movies'
+import Spinner from '../components/Spinner.vue'
 export default {
+  name: 'Table',
   components: {
-    Detail
-  },
-  props: {
-    searchingMovies: {
-      type: Array,
-      default: () => []
-    }
+    Detail,
+    Navbar,
+    SearchBar,
+    Pagination,
+    Spinner
   },
   data () {
     return {
@@ -113,7 +142,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['showData', 'isLoading']),
+    ...mapState(['showData', 'isLoading', 'movies', 'input', 'nowPage', 'typeValue']),
     sortedMovie: function () {
       const copyArr = this.searchingResults.slice(0, 10)
       // asc排序
@@ -152,6 +181,20 @@ export default {
       this.searchingResults = [
         ...newValue
       ]
+    },
+    nowPage (newValue) {
+      if (newValue) {
+        this.$store.commit('nowIsLoading')
+        moviesAPI.getMoviesByPage({
+          keyword: this.input,
+          page: newValue,
+          type: this.typeValue
+        })
+          .then(response => {
+            this.$store.commit('nowIsLoading')
+            this.$store.commit('getMovies', response.data.Search)
+          })
+      }
     }
   },
   methods: {
@@ -174,6 +217,15 @@ export default {
         this.sortStatus = status
         this.currentSortDir = 'asc'
       }
+    },
+    changeView (status) {
+      if (status === 'table') {
+        this.$store.commit('showTable')
+        this.$router.push({ name: 'Table', query: { keyword: this.input } })
+      } else if (status === 'card') {
+        this.$store.commit('closeTable')
+        this.$router.push({ name: 'Search', query: { keyword: this.input } })
+      }
     }
   }
 }
@@ -182,6 +234,11 @@ export default {
 <style lang="scss" scoped>
 @import '../assets/SCSS/main.scss';
   .table {
+    &__background {
+      // background-color: #eff4f4;
+      // height: 100%;
+      // min-height: 100vh;
+    }
     width: 100%;
     border-radius: 5px;
     @extend %box-shadow-style;
@@ -193,6 +250,22 @@ export default {
       width: 90%;
       max-width: 800px;
       margin: 0 auto;
+      padding-top: 1rem;
+    }
+    &__navbar__wrapper {
+      @extend %box-shadow-style;
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    &__search__bar__wrapper {
+      width: 100%;
+    }
+    &__icons__wrapper {
+      width: 10%;
+      display: flex;
+      grid-gap: 10px;
+      margin-right: 10px;
     }
     &__header {
       display: flex;
@@ -261,6 +334,16 @@ export default {
   @media screen and (max-width: 600px) {
     .table {
       min-width: 300px;
+      &__search__bar__wrapper {
+        display: none;
+      }
+      &__navbar__wrapper {
+        justify-content: space-around;
+      }
+      &__icons__wrapper {
+        font-size: 1.5rem;
+        margin-right: 20px;
+      }
       &__header {
         display: none;
       }

@@ -19,12 +19,18 @@ export default new Vuex.Store({
       rating: '',
       description: '',
       image: ''
-    }
+    },
+    movies: []
   },
   mutations: {
     searchingResults (state, data) {
       state.totalMovies = Math.ceil(data / 10)
+    },
+    showTable (state) {
       state.showData = true
+    },
+    closeTable (state) {
+      state.showData = false
     },
     getInput (state, text) {
       state.input = text
@@ -53,6 +59,9 @@ export default new Vuex.Store({
     },
     getPageNum (state, data) {
       state.nowPage = data
+    },
+    getMovies (state, data) {
+      state.movies = data
     }
   },
   actions: {

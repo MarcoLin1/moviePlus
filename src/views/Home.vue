@@ -5,30 +5,19 @@
       <SearchBar />
     </div>
     <Spinner v-if="isLoading" />
-    <Table
-      :searching-movies="movies"
-    />
-    <Pagination
-      @current-page-movies="getCurrentMovies"
-    />
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import Table from '@/components/Table.vue'
-import Pagination from '@/components/Pagination.vue'
 import Spinner from '@/components/Spinner.vue'
 import Navbar from '@/components/Navbar.vue'
 import SearchBar from '@/components/SearchBar.vue'
-// import movies from './../apis/movies'
 import { mapState } from 'vuex'
 
 export default {
   name: 'Home',
   components: {
-    Table,
-    Pagination,
     Spinner,
     Navbar,
     SearchBar
@@ -40,21 +29,6 @@ export default {
       movies: []
     }
   },
-  // watch: {
-  //   nowPage (newValue) {
-  //     if (newValue) {
-  //       movies.getMoviesByPage({
-  //         keyword: this.inputText,
-  //         page: newValue,
-  //         type: this.typeValue
-  //       })
-  //         .then(response => {
-  //           this.movies = response.data.Search
-  //           this.$store.commit('nowIsLoading')
-  //         })
-  //     }
-  //   }
-  // },
   computed: {
     ...mapState(['isLoading', 'nowPage', 'typeValue'])
   },

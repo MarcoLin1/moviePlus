@@ -5,11 +5,6 @@
       <div class="search__bar__inner__wrapper">
         <SearchBar />
       </div>
-    </div>
-    <div class="search__keyword__wrapper">
-      <span class="search__keyword">
-        Movies with keyword "{{ input }} "
-      </span>
       <div class="search__icons__wrapper">
         <div class="search__icon__list">
           <i
@@ -25,6 +20,11 @@
           />
         </div>
       </div>
+    </div>
+    <div class="search__keyword__wrapper">
+      <span class="search__keyword">
+        Movies with keyword "{{ input }} "
+      </span>
     </div>
     <div class="search__content__wrapper">
       <div
@@ -42,21 +42,19 @@
               alt=""
               class="search__content__image"
             >
-          </div>
-        </div>
-        <div class="search__content__title__wrapper">
-          <div class="search__content__title">
-            {{ movie.Title }}
-          </div>
-        </div>
-        <div class="search__content__text__group">
-          <div class="search__content__text__item">
-            Year:
-            <span class="search__content__rating">{{ movie.Year }}</span>
-          </div>
-          <div class="search__content__text__item">
-            Type:
-            <span class="search__content__type">{{ movie.Type }}</span>
+            <div class="search__content__image__inner">
+              <div class="search__content__inner__title">
+                {{ movie.Title }}
+              </div>
+              <div class="search__content__inner__text__group">
+                <div class="search__content__inner__year">
+                  {{ movie.Year }}
+                </div>
+                <div class="search__content__inner__type">
+                  {{ movie.Type }}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -129,17 +127,15 @@ export default {
 <style lang="scss" scoped>
 @import '../assets/SCSS/main.scss';
   .search {
-    &__container {
-      // background-color: #eff4f4;
-    }
     &__navbar__wrapper {
       @extend %box-shadow-style;
       display: flex;
       align-items: center;
-      padding-bottom: 10px;
+      justify-content: space-around;
+      margin-bottom: 20px;
     }
     &__bar__inner__wrapper {
-      width: 40%;
+      display: none;
     }
     &__keyword__wrapper {
       padding: 15px;
@@ -152,7 +148,10 @@ export default {
     }
     &__icons__wrapper {
       display: flex;
+      width: 10%;
       grid-gap: 10px;
+      margin-right: 10px;
+      font-size: 1.5rem;
     }
     &__icon {
       &:hover {
@@ -168,31 +167,53 @@ export default {
     grid-gap: 1.5rem
   }
   .search__content {
-    box-shadow: 6px 6px 6px 7px #0000002b;
-    width: 70%;
-    min-width: 350px;
-    // min-width: 300px;
-    // max-width: 400px;
     margin: 0 auto;
     &__image__wrapper {
-      // height: 100%;
-      max-height: 450px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 10px 0px;
+      position: relative;
     }
     &__image {
-      width: 300px;
-      height: 400px;
       transition: 0.4s ease-in;
       border-radius: 5px;
-      margin: 15px 0;
-      @extend %box-shadow-style;
-      &:hover {
-        transform: scale(103%);
-        cursor: pointer;
-      }
+      box-shadow: 6px 6px 6px rgba(0, 0, 0, 0.40);
+    }
+    &__image__inner {
+      width: 100%;
+      height: 45%;
+      background: rgba(0, 0, 0, 0.85);
+      position: absolute;
+      top: 55%;
+      left: 0;
+      color: #fff;
+      font-family: 'Chakra Petch', sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      transform: translateY(150%);
+      transition: 0.4s ease-in;
+      border-bottom-right-radius: 5px;
+      border-bottom-left-radius: 5px;
+    }
+    &__inner__title {
+      font-size: 1.3rem;
+      text-align: center;
+      padding: 0 10px;
+    }
+    &__inner__text__group {
+      display: flex;
+      justify-content: space-evenly;
+      margin-top: 30px;
+      width: 85%;
+      font-size: 1.3rem;
+    }
+    &__image:hover {
+      opacity: 0.4;
+      cursor: pointer;
+    }
+    &__image:hover ~ &__image__inner {
+      opacity: 1;
+      transform: translateY(0%);
     }
     &__title__wrapper {
       text-align: center;
@@ -216,21 +237,26 @@ export default {
     }
   }
 
+@media screen and (min-width: 600px) {
+  .search {
+    &__navbar__wrapper {
+      justify-content: space-between;
+    }
+    &__bar__inner__wrapper {
+      display: block;
+      width: 90%;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    &__icons__wrapper {
+      font-size: 1rem;
+    }
+  }
+}
+
 @media screen and (min-width: 720px) {
   .search__content__wrapper {
     grid-template-columns: repeat(2, 1fr);
-  }
-  // .search__content {
-  //   width: 90%;
-  // }
-  .search__content__image {
-    // width: 85%;
-    // height: 80%;
-    // max-width: 300px;
-    // max-height: 500px;
-    // height: 300px;
-    // width: 90%;
-    // max-width: ;
   }
 }
 

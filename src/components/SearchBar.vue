@@ -111,6 +111,7 @@ export default {
 @import '../assets/SCSS/main.scss';
   .search__bar {
     &__input__wrapper {
+
       display: flex;
     }
     &__form {
@@ -127,20 +128,22 @@ export default {
       padding-left: 10px;
       letter-spacing: 0.5px;
       font-family: 'Chakra Petch', sans-serif;
-      @extend %box-shadow-style;
+      background-color: #e1e1e1;
+      // @extend %box-shadow-style;
       @include border-style (1px, solid, #eeeeee, 5px);
       &:focus {
-        border: 1px solid #133156;
+        border: 1px solid #eeeeee;
         box-shadow: none;
+        background: #fff;
       }
     }
     &__button {
-      color: #fff;
-      background-color: #133156;
-      @include border-style (1px, solid, #133156, 5px);
+      background-color: #e1e1e1;
+      @include border-style (1px, solid, #e1e1e1, 5px);
       margin-left: 5px;
       font-family: 'Chakra Petch', sans-serif;
       font-size: 0.8rem;
+      color: #757575;
       &:hover {
         background-color: $header-text-blue;
         color: #fff;
@@ -149,13 +152,17 @@ export default {
     }
     &__type__wrapper {
       border: none;
-      background-color: #133156;
-      color: #fff;
-      border-radius: 5px;
+      @include border-style (1px, solid, #e1e1e1, 5px);
       margin-left: 5px;
       padding-left: 5px;
       font-family: 'Chakra Petch', sans-serif;
       font-size: 0.8rem;
+      color: #757575;
+      &:hover, &:focus {
+        background-color: $header-text-blue;
+        color: #fff;
+        border-color: transparent;
+      }
     }
   }
 @media screen and (min-width: 565px) {

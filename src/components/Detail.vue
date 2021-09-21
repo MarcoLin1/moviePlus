@@ -216,6 +216,7 @@ export default {
     }
     &__wrapper__header {
       padding-left: 0;
+      margin: 0 10px;
     }
     &__wrapper__title {
       font-size: 1.2rem;

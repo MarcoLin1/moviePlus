@@ -9,7 +9,7 @@
         v-model="inputText"
         type="text"
         class="search__bar__input"
-        placeholder="enter movie name or keyword"
+        placeholder="please enter your keyword"
       >
       <button
         type="submit"
@@ -45,7 +45,7 @@
 
 <script>
 // @ is an alias to /src
-import movies from './../apis/movies'
+import moviesAPI from './../apis/movies'
 import { mapState } from 'vuex'
 
 export default {
@@ -55,23 +55,7 @@ export default {
   data () {
     return {
       inputText: '',
-      page: '',
-      movies: []
-    }
-  },
-  watch: {
-    nowPage (newValue) {
-      if (newValue) {
-        movies.getMoviesByPage({
-          keyword: this.inputText,
-          page: newValue,
-          type: this.typeValue
-        })
-          .then(response => {
-            this.movies = response.data.Search
-            this.$store.commit('nowIsLoading')
-          })
-      }
+      page: ''
     }
   },
   computed: {
@@ -82,26 +66,40 @@ export default {
       this.$store.commit('nowIsLoading')
       const select = document.querySelector('.search__bar__type__wrapper')
       const option = select.options[select.selectedIndex]
-      const typeValue = option.value
-      if (typeValue === '') {
-        const { data } = await movies.getMovies({ keyword: this.inputText })
-        this.movies = data.Search
+      this.$store.commit('getType', option.value)
+      if (this.typeValue === '') {
+        const { data } = await moviesAPI.getMovies({
+          keyword: this.inputText
+        })
         this.$store.commit('searchingResults', Number(data.totalResults))
-        this.$store.commit('getMovies', this.movies)
-        this.$router.push({ name: 'Search', query: { keyword: this.inputText } })
+        this.$store.commit('getMovies', data.Search)
+        this.$router.push({
+          name: this.$parent.name || 'Table',
+          query: {
+            keyword: this.inputText,
+            type: this.typeValue,
+            page: this.nowPage
+          }
+        })
       }
-      if (typeValue !== '') {
-        const { data } = await movies.getMoviesByType({ keyword: this.inputText, type: typeValue })
-        this.movies = data.Search
+      if (this.typeValue !== '') {
+        const { data } = await moviesAPI.getMoviesByType({
+          keyword: this.inputText,
+          type: this.typeValue
+        })
         this.$store.commit('searchingResults', Number(data.totalResults))
-        this.$store.commit('getMovies', this.movies)
-        this.$router.push({ name: 'Search', query: { keyword: this.inputText, type: typeValue } })
+        this.$store.commit('getMovies', data.Search)
+        this.$router.push({
+          name: 'Table',
+          query: {
+            keyword: this.inputText,
+            type: this.typeValue,
+            page: this.nowPage
+          }
+        })
       }
       this.$store.commit('getInput', this.inputText)
       this.$store.commit('nowIsLoading')
-    },
-    getCurrentMovies (movies) {
-      this.movies = movies
     }
   }
 }
@@ -111,7 +109,6 @@ export default {
 @import '../assets/SCSS/main.scss';
   .search__bar {
     &__input__wrapper {
-
       display: flex;
     }
     &__form {
@@ -128,48 +125,40 @@ export default {
       padding-left: 10px;
       letter-spacing: 0.5px;
       font-family: 'Chakra Petch', sans-serif;
-      background-color: #e1e1e1;
-      // @extend %box-shadow-style;
+      box-shadow: inset 1px 1px 3px #c5d4e3, inset 2px 2px 6px #c5d4e3;
       @include border-style (1px, solid, #eeeeee, 5px);
+      transition: all 0.3s ease-in-out;
       &:focus {
-        border: 1px solid #eeeeee;
         box-shadow: none;
         background: #fff;
       }
     }
-    &__button {
-      background-color: #e1e1e1;
+    &__button, &__type__wrapper {
       @include border-style (1px, solid, #e1e1e1, 5px);
+      box-shadow: -2px -2px 6px rgba(255, 255, 255, 0.60), 2px 2px 12px #c8d8e7;
       margin-left: 5px;
       font-family: 'Chakra Petch', sans-serif;
       font-size: 0.8rem;
       color: #757575;
-      &:hover {
-        background-color: $header-text-blue;
-        color: #fff;
-        border-color: transparent;
-      }
+      background-color: transparent;
     }
     &__type__wrapper {
-      border: none;
-      @include border-style (1px, solid, #e1e1e1, 5px);
-      margin-left: 5px;
       padding-left: 5px;
-      font-family: 'Chakra Petch', sans-serif;
-      font-size: 0.8rem;
-      color: #757575;
+    }
+    &__button:hover {
+      box-shadow: inset 1px 1px 3px #c5d4e3, inset 2px 2px 6px #c5d4e3;
+      border-color: transparent;
+    }
+    &__type__wrapper {
       &:hover, &:focus {
-        background-color: $header-text-blue;
-        color: #fff;
+        box-shadow: inset 1px 1px 3px #c5d4e3, inset 2px 2px 6px #c5d4e3;
         border-color: transparent;
+        cursor: pointer;
       }
     }
   }
 @media screen and (min-width: 565px) {
   .search__bar {
-    &__input {
-      font-size: 1rem;
-    }
     &__button,  &__type__wrapper {
       margin-left: 10px;
       font-size: 1.1rem;

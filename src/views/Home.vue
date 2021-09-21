@@ -1,6 +1,8 @@
 <template>
   <div class="home__container">
-    <Navbar />
+    <div class="navbar__wrapper">
+      <Navbar />
+    </div>
     <div class="searching__wrapper">
       <SearchBar />
     </div>
@@ -30,7 +32,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['isLoading', 'nowPage', 'typeValue'])
+    ...mapState(['isLoading'])
   },
   methods: {
     getCurrentMovies (movies) {
@@ -44,12 +46,18 @@ export default {
 @import '../assets/SCSS/main.scss';
   .home {
     &__container {
-      background: url('../assets/hollywood.jpg');
-      background-size: cover;
-      background-position: center;
+      background: #dde2ea;
       width: 100%;
       height: 100%;
       min-height: 100vh;
+    }
+  }
+  .navbar {
+    &__wrapper {
+      display: flex;
+      justify-content: center;
+      position: relative;
+      top: 100px;
     }
   }
   .searching {

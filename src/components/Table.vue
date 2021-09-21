@@ -22,7 +22,6 @@
       </div>
     </div>
     <div
-      v-if="showData"
       class="table__container"
     >
       <div class="table">
@@ -69,11 +68,11 @@
             </div>
             <div class="header__icon__group">
               <i
-                class="fas fa-sort-up header__icon__up"
+                class="fas fa-sort-up fa-2x header__icon__up"
                 @click="sorting('Year', 'up')"
               />
               <i
-                class="fas fa-sort-down header__icon__down"
+                class="fas fa-sort-down fa-2x header__icon__down"
                 @click="sorting('Year', 'down')"
               />
             </div>
@@ -83,7 +82,7 @@
           </div>
         </div>
         <div
-          v-for="movie in movies"
+          v-for="movie in sortedMovie"
           :key="movie.imdbID"
           class="table__content"
         >
@@ -116,7 +115,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 import { mapState } from 'vuex'
 import Detail from './Detail.vue'
 import Navbar from './Navbar.vue'
@@ -135,16 +133,16 @@ export default {
   },
   data () {
     return {
-      searchingResults: [],
       currentSort: 'Year',
       currentSortDir: 'desc',
-      sortStatus: 'down'
+      sortStatus: 'down',
+      name: 'Table'
     }
   },
   computed: {
-    ...mapState(['showData', 'isLoading', 'movies', 'input', 'nowPage', 'typeValue']),
+    ...mapState(['isLoading', 'movies', 'input', 'nowPage', 'typeValue']),
     sortedMovie: function () {
-      const copyArr = this.searchingResults.slice(0, 10)
+      const copyArr = this.movies.slice(0, 10)
       // asc排序
       if (this.currentSortDir === 'asc' && this.sortStatus === 'up') {
         return copyArr.sort((a, b) => {
@@ -177,36 +175,35 @@ export default {
     }
   },
   watch: {
-    searchingMovies (newValue) {
-      this.searchingResults = [
-        ...newValue
-      ]
-    },
     nowPage (newValue) {
       if (newValue) {
-        this.$store.commit('nowIsLoading')
         moviesAPI.getMoviesByPage({
           keyword: this.input,
           page: newValue,
           type: this.typeValue
         })
           .then(response => {
-            this.$store.commit('nowIsLoading')
             this.$store.commit('getMovies', response.data.Search)
+            this.$router.push({
+              name: 'Table',
+              query: {
+                keyword: this.input,
+                type: this.typeValue,
+                page: this.nowPage
+              }
+            })
+            this.$store.commit('nowIsLoading')
           })
       }
     }
   },
   methods: {
-    showDetail (id) {
+    async showDetail (id) {
       this.$store.commit('nowIsLoading')
-      axios.get(`https://www.omdbapi.com/?apikey=752b08a&i=${id}&plot=full`)
-        .then(response => {
-          const { data } = response
-          this.$store.commit('getMovieDetailed', data)
-          this.$store.commit('nowIsLoading')
-          this.$store.commit('openModal')
-        })
+      const { data } = await moviesAPI.getMovieDetail({ id })
+      this.$store.commit('getMovieDetailed', data)
+      this.$store.commit('nowIsLoading')
+      this.$store.commit('openModal')
     },
     sorting (sort, status) {
       this.currentSort = sort
@@ -221,10 +218,24 @@ export default {
     changeView (status) {
       if (status === 'table') {
         this.$store.commit('showTable')
-        this.$router.push({ name: 'Table', query: { keyword: this.input } })
+        this.$router.push({
+          name: 'Table',
+          query: {
+            keyword: this.input,
+            type: this.typeValue,
+            page: this.nowPage
+          }
+        })
       } else if (status === 'card') {
         this.$store.commit('closeTable')
-        this.$router.push({ name: 'Search', query: { keyword: this.input } })
+        this.$router.push({
+          name: 'Search',
+          query: {
+            keyword: this.input,
+            type: this.typeValue,
+            page: this.nowPage
+          }
+        })
       }
     }
   }
@@ -234,11 +245,6 @@ export default {
 <style lang="scss" scoped>
 @import '../assets/SCSS/main.scss';
   .table {
-    &__background {
-      // background-color: #eff4f4;
-      // height: 100%;
-      // min-height: 100vh;
-    }
     width: 100%;
     border-radius: 5px;
     @extend %box-shadow-style;
@@ -266,6 +272,14 @@ export default {
       display: flex;
       grid-gap: 10px;
       margin-right: 10px;
+      color: #dde2ea;
+      font-size: 1.5rem;
+    }
+    &__icon__list, &__icon__table {
+      &:hover {
+        color: $header-text-blue;
+        cursor: pointer;
+      }
     }
     &__header {
       display: flex;

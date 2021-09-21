@@ -38,6 +38,16 @@
               <span class="detail__subtitle">Rating :</span> {{ movie.rating === 'N/A' ? '--': movie.rating }}
             </div>
           </div>
+          <div class="detail__wrapper__item detail__wraaper__director">
+            <div class="detail__director">
+              <span class="detail__subtitle">Director :</span> {{ movie.director }}
+            </div>
+          </div>
+          <div class="detail__wrapper__item detail__wrapper__actor">
+            <div class="detail__actor">
+              <span class="detail__subtitle">Actors :</span> {{ movie.actors }}
+            </div>
+          </div>
           <div class="detail__wrapper__item">
             <div class="detail__description">
               {{ movie.description | emptyText }}
@@ -116,10 +126,11 @@ export default {
    }
    &__wrapper__header {
      position: relative;
+     top: 10px;
      display: flex;
      justify-content: space-between;
-     width: 90%;
-     margin: 0 auto;
+     width: 95%;
+     margin: 0 20px;
    }
    &__wrapper__title, &__wrapper__close {
      line-height: 50px;
@@ -137,8 +148,8 @@ export default {
      background: linear-gradient(to bottom right,#408fff,rgb(64, 144, 255));
      color: #fff;
      position: absolute;
-     top: -20%;
-     right: -9%;
+     top: -50%;
+     right: -6%;
      cursor: pointer;
      &:hover {
        background: linear-gradient(to bottom right,#408fff,rgb(7, 77, 176));
@@ -152,11 +163,13 @@ export default {
    }
    &__wrapper__item {
      display: flex;
-     justify-content: space-around;
+     justify-content: space-between;
      margin: 20px auto;
+     text-align: left;
    }
    &__wrapper__image {
-     padding: 0 20px;
+     padding-right: 20px;
+     align-items: center;
    }
    &__wrapper__text {
      width: 100%;
@@ -177,7 +190,6 @@ export default {
      font-family: 'Acme', sans-serif;
    }
    &__description {
-     width: 90%;
      height: auto;
      max-height: 400px;
      padding: 5px 10px 5px 10px;
@@ -187,6 +199,9 @@ export default {
      @include text-style(1rem, 500, #868686);
      font-family: 'Chakra Petch', sans-serif;
      text-align: left;
+   }
+   &__wrapper__actor {
+     line-height: 1.5rem;
    }
   }
   .fade__in {
@@ -199,6 +214,9 @@ export default {
     &__wrapper {
       min-width: 380px;
     }
+    &__wrapper__header {
+      padding-left: 0;
+    }
     &__wrapper__title {
       font-size: 1.2rem;
     }
@@ -209,12 +227,20 @@ export default {
       padding: 0;
     }
     &__wrapper__information {
-      width: 90%;
+      width: 95%;
       justify-content: space-between;
+    }
+    &__wrapper__item {
+      width: 95%;
+      margin: 20px auto;
+    }
+    &__actor {
+      text-align: left;
     }
     &__description {
       outline: none;
       padding: 0;
+      width: 95%;
     }
   }
 }

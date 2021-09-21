@@ -8,13 +8,13 @@
       <div class="search__icons__wrapper">
         <div class="search__icon__list">
           <i
-            class="fas fa-list fa-lg search__icon"
+            class="fas fa-list fa-2x search__icon"
             @click.stop.prevent="changeView('table')"
           />
         </div>
         <div class="search__icon__table">
           <i
-            class="fa fa-th fa-lg search__icon"
+            class="fa fa-th fa-2x search__icon"
             aria-hidden="true"
             @click.stop.prevent="changeView('card')"
           />
@@ -23,7 +23,7 @@
     </div>
     <div class="search__keyword__wrapper">
       <span class="search__keyword">
-        Movies with keyword "{{ input }} "
+        Movies with keyword " {{ input }} "
       </span>
     </div>
     <div class="search__content__wrapper">
@@ -42,18 +42,18 @@
               alt=""
               class="search__content__image"
             >
-            <div class="search__content__image__inner">
-              <div class="search__content__inner__title">
-                {{ movie.Title }}
-              </div>
-              <div class="search__content__inner__text__group">
-                <div class="search__content__inner__year">
-                  {{ movie.Year }}
-                </div>
-                <div class="search__content__inner__type">
-                  {{ movie.Type }}
-                </div>
-              </div>
+          </div>
+        </div>
+        <div class="search__content__image__inner">
+          <div class="search__content__inner__title">
+            {{ movie.Title }}
+          </div>
+          <div class="search__content__inner__text__group">
+            <div class="search__content__inner__year">
+              {{ movie.Year }}
+            </div>
+            <div class="search__content__inner__type">
+              {{ movie.Type }}
             </div>
           </div>
         </div>
@@ -84,13 +84,17 @@ export default {
     Spinner
   },
   mixins: [emptyFilter],
+  data () {
+    return {
+      name: 'Search'
+    }
+  },
   computed: {
     ...mapState(['movies', 'input', 'nowPage', 'typeValue', 'isLoading'])
   },
   watch: {
     nowPage (newValue) {
       if (newValue) {
-        this.$store.commit('nowIsLoading')
         moviesAPI.getMoviesByPage({
           keyword: this.input,
           page: newValue,
@@ -98,8 +102,16 @@ export default {
         })
           .then(response => {
             this.$store.commit('getMovies', response.data.Search)
+            this.$router.push({
+              name: 'Search',
+              query: {
+                keyword: this.input,
+                type: this.typeValue,
+                page: this.nowPage
+              }
+            })
+            this.$store.commit('nowIsLoading')
           })
-        this.$store.commit('nowIsLoading')
       }
     }
   },
@@ -114,10 +126,24 @@ export default {
     changeView (status) {
       if (status === 'table') {
         this.$store.commit('showTable')
-        this.$router.push({ name: 'Table', query: { keyword: this.input } })
+        this.$router.push({
+          name: 'Table',
+          query: {
+            keyword: this.input,
+            type: this.typeValue,
+            page: this.nowPage
+          }
+        })
       } else if (status === 'card') {
         this.$store.commit('closeTable')
-        this.$router.push({ name: 'Search', query: { keyword: this.input } })
+        this.$router.push({
+          name: 'Search',
+          query: {
+            keyword: this.input,
+            type: this.typeValue,
+            page: this.nowPage
+          }
+        })
       }
     }
   }
@@ -151,11 +177,12 @@ export default {
       width: 10%;
       grid-gap: 10px;
       margin-right: 10px;
-      font-size: 1.5rem;
+      color: #dde2ea;
     }
     &__icon {
       &:hover {
         color: #118eee;
+        cursor: pointer;
       }
     }
   }
@@ -167,22 +194,33 @@ export default {
     grid-gap: 1.5rem
   }
   .search__content {
+    position: relative;
+    min-width: 350px;
+    min-height: 500px;
     margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    box-shadow: 6px 6px 6px 6px #0000002b;
     &__image__wrapper {
       position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
     &__image {
+      width: 90%;
       transition: 0.4s ease-in;
-      border-radius: 5px;
-      box-shadow: 6px 6px 6px rgba(0, 0, 0, 0.40);
+      @include border-style(1px, solid, #eeeeee, 5px);
     }
     &__image__inner {
       width: 100%;
-      height: 45%;
+      height: auto;
+      padding: 10px 0;
       background: rgba(0, 0, 0, 0.85);
       position: absolute;
-      top: 55%;
-      left: 0;
+      bottom: 0;
       color: #fff;
       font-family: 'Chakra Petch', sans-serif;
       display: flex;
@@ -190,13 +228,14 @@ export default {
       justify-content: center;
       align-items: center;
       opacity: 0;
+      visibility: hidden;
       transform: translateY(150%);
       transition: 0.4s ease-in;
       border-bottom-right-radius: 5px;
       border-bottom-left-radius: 5px;
     }
     &__inner__title {
-      font-size: 1.3rem;
+      font-size: 1.2rem;
       text-align: center;
       padding: 0 10px;
     }
@@ -205,14 +244,15 @@ export default {
       justify-content: space-evenly;
       margin-top: 30px;
       width: 85%;
-      font-size: 1.3rem;
+      font-size: 1.1rem;
     }
     &__image:hover {
       opacity: 0.4;
       cursor: pointer;
     }
-    &__image:hover ~ &__image__inner {
+    &__image__container:hover ~ &__image__inner {
       opacity: 1;
+      visibility: visible;
       transform: translateY(0%);
     }
     &__title__wrapper {
@@ -257,12 +297,17 @@ export default {
 @media screen and (min-width: 720px) {
   .search__content__wrapper {
     grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(5, 500px);
   }
 }
 
 @media screen and (min-width: 1080px) {
   .search__content__wrapper {
-    grid-template-columns: repeat(3, minmax(300px, 450px));
+    grid-template-columns: repeat(3, 300px);
+    grid-template-rows: repeat(4, 500px);
+  }
+  .search__content {
+    min-width: 300px;
   }
 }
 </style>

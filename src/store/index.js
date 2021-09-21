@@ -11,14 +11,16 @@ export default new Vuex.Store({
     showData: false,
     isLoading: false,
     typeValue: '',
-    nowPage: 0,
+    nowPage: 1,
     movie: {
       title: '',
       year: '',
       type: '',
       rating: '',
       description: '',
-      image: ''
+      image: '',
+      actors: '',
+      director: ''
     },
     movies: []
   },
@@ -48,7 +50,9 @@ export default new Vuex.Store({
         type: data.Type,
         rating: data.imdbRating,
         description: data.Plot,
-        image: data.Poster
+        image: data.Poster,
+        director: data.Director,
+        actors: data.Actors
       }
     },
     nowIsLoading (state) {

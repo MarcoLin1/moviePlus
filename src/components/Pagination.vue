@@ -8,7 +8,7 @@
           <a
             href=""
             class="pagination__pre__icon"
-            @click.stop.prevent="updatePage(currentPage - 1)"
+            @click.stop.prevent="updatePage(nowPage - 1)"
           >&lt;</a>
         </li>
       </div>
@@ -16,7 +16,7 @@
         <a
           v-for="index in pages"
           :key="index"
-          :class="currentPage === index ? 'active':''"
+          :class="nowPage === index ? 'active':''"
           href=""
           class="pagination__number"
           @click.stop.prevent="updatePage(index)"
@@ -27,7 +27,7 @@
           <a
             href=""
             class="pagination__next__icon"
-            @click.stop.prevent="updatePage(currentPage + 1)"
+            @click.stop.prevent="updatePage(nowPage + 1)"
           >&gt;</a>
         </li>
       </div>
@@ -38,19 +38,14 @@
 <script>
 import { mapState } from 'vuex'
 export default {
-  data () {
-    return {
-      currentPage: 1
-    }
-  },
   computed: {
-    ...mapState(['totalMovies', 'input', 'showData']),
+    ...mapState(['totalMovies', 'input', 'nowPage']),
     endPage () {
-      if (this.totalMovies > 10 && this.currentPage > 10 && this.currentPage < this.totalMovies) {
-        if ((this.currentPage + 10) > this.totalMovies) {
+      if (this.totalMovies > 10 && this.nowPage > 10 && this.nowPage < this.totalMovies) {
+        if ((this.nowPage + 10) > this.totalMovies) {
           return this.totalMovies
         }
-        return this.currentPage + 9
+        return this.nowPage + 9
       } else if (this.totalMovies < 10) {
         return this.totalMovies
       }
@@ -59,23 +54,23 @@ export default {
     pages () {
       const range = []
       // 總筆數少於10筆
-      if ((this.endPage - this.currentPage) <= 10 && this.currentPage <= 10 && this.totalMovies <= 10) {
+      if ((this.endPage - this.nowPage) <= 10 && this.nowPage <= 10 && this.totalMovies <= 10) {
         for (let i = 1; i <= this.totalMovies; i++) {
           range.push(i)
         }
       // 總筆數超過10筆，第一頁
-      } else if ((this.endPage - this.currentPage) <= 10 && this.currentPage <= 10) {
+      } else if ((this.endPage - this.nowPage) <= 10 && this.nowPage <= 10) {
         for (let i = 1; i <= 10; i++) {
           range.push(i)
         }
       // 最後一頁
-      } else if ((this.totalMovies - this.currentPage) < 10) {
+      } else if ((this.totalMovies - this.nowPage) < 10) {
         for (let i = this.totalMovies - 9; i <= this.totalMovies; i++) {
           range.push(i)
         }
       // 其他換頁
-      } else if ((this.endPage - this.currentPage) <= 10 && this.currentPage > 10) {
-        for (let i = this.currentPage - 1; i <= this.endPage - 1; i++) {
+      } else if ((this.endPage - this.nowPage) <= 10 && this.nowPage > 10) {
+        for (let i = this.nowPage - 1; i <= this.endPage - 1; i++) {
           range.push(i)
         }
       }
@@ -84,14 +79,13 @@ export default {
   },
   methods: {
     updatePage (pageNum) {
-      if (this.endPage < this.currentPage) {
+      if (this.endPage < this.nowPage) {
         return
       }
       if (pageNum === 0) {
         return
       }
       this.$store.commit('nowIsLoading')
-      this.currentPage = pageNum
       this.$store.commit('getPageNum', pageNum)
       this.changePageStyle()
     },
@@ -99,12 +93,12 @@ export default {
       const allPageNum = document.querySelectorAll('.pagination__number')
       const activePage = document.querySelectorAll('.active')
       allPageNum.forEach(page => {
-        if (Number(page.textContent) === this.currentPage) {
+        if (Number(page.textContent) === this.nowPage) {
           page.classList.add('active')
         }
       })
       activePage.forEach(page => {
-        if (Number(page.textContent) !== this.currentPage) {
+        if (Number(page.textContent) !== this.nowPage) {
           page.classList.remove('active')
         }
       })

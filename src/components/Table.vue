@@ -277,7 +277,7 @@ export default {
     }
     &__icon__list, &__icon__table {
       &:hover {
-        color: $header-text-blue;
+        color: #118eee;
         cursor: pointer;
       }
     }

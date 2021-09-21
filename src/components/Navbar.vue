@@ -21,7 +21,7 @@
     .header__text {
       font-size: 2.5rem;
       font-weight: 600;
-      color: $light-green;
+      color: #3f886d;
     }
   }
 </style>
